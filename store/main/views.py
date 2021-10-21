@@ -1,12 +1,17 @@
-from operator import add, mod
-import re
-from flask import render_template, url_for, redirect, request, flash, current_app
+import os
+from flask import render_template, url_for, redirect, request, flash, current_app, send_from_directory
 import flask
 from . import main
 from .. import db
 from .forms import CreateItem, RestockItems
 from ..models import Item, CartRow
 
+
+
+@main.route('/favicon.ico')
+def favicon():
+    """Adding a favicon to the app. This method is stress. Flask should be ashamed."""
+    return current_app.send_static_file('favicon.ico')
 
 
 @main.route('/', methods=['GET', 'POST'])
