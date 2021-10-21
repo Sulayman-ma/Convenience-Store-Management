@@ -143,11 +143,14 @@ def manage_items():
     if request.method == 'POST':
         # list of checked boxes
         ids = request.form.getlist('item')
+        if ids == []:
+            flash('Please select at least one item.', 'info')
+            return redirect(url_for('.manage_items'))
         to_be_removed = [Item.query.get(id) for id in ids]
 
         for item in to_be_removed:
             db.session.delete(item)
         db.session.commit()
-        flash('Items removed.', 'info')
+        flash('Item(s) removed.', 'success')
         return redirect(url_for('.manage_items'))
     return render_template('main/manage.html', items = items)
