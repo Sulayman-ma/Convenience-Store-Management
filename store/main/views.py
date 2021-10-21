@@ -1,6 +1,4 @@
-import os
 from flask import render_template, url_for, redirect, request, flash, current_app, send_from_directory
-import flask
 from . import main
 from .. import db
 from .forms import CreateItem, RestockItems
@@ -37,6 +35,7 @@ def index():
                             sub_total = quantity * item.price)
         db.session.add(cart_row)
         db.session.commit()
+        flash('{} added to cart.'.format(item.name), 'info')
         return redirect(url_for('.index'))
     return render_template('main/home.html', items = items)
 
@@ -67,7 +66,8 @@ def cart():
                 db.session.delete(row)
             # commit session and redirect
             db.session.commit()
-            return redirect(url_for('.index'))
+            flash('Checkout Complete! Return to Store Front.', 'success')
+            return redirect(url_for('.cart'))
 
         """Delete items from cart"""
         # loop though list and delete each item from DB
@@ -119,7 +119,7 @@ def restock():
 
         # ensure user does not restock a negative number
         if addition < 1 or name not in item_names:
-            flask('Sorry, you have entered an invalid stock amount.', 'error')
+            flash('Sorry, you have entered an invalid stock amount.', 'error')
             return redirect(url_for('.restock'))
 
         for item in items:
@@ -131,6 +131,7 @@ def restock():
         modded_item.post_restock = modded_item.stock
         db.session.add(modded_item)
         db.session.commit()
+        flash('{}+ {} added to stock'.format(addition, item.name), 'info')
         return redirect(url_for('.restock'))
     return render_template('main/restock.html', items = items, restock_form = restock_form)
 
@@ -147,5 +148,6 @@ def manage_items():
         for item in to_be_removed:
             db.session.delete(item)
         db.session.commit()
+        flash('Items removed.', 'info')
         return redirect(url_for('.manage_items'))
     return render_template('main/manage.html', items = items)
