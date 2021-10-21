@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1><img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">Checkout Cart</h1>
+
+    <input type="button" value="Modify Cart 🖊" class="mod-switch">
+    <input type="button" value="Resume Checkout 🛒" class="res-switch">
+
+    <a style="float: right;" href="{{ url_for('.index') }}">Go back ⬅</a>
+
+    <div class="main-cart">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table class="u-full-width">
+                <caption>Cart Items</caption>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Purchase Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for row in cart_rows %}
+                        <tr>
+                            <td>{{ row.name }}</td>
+                            <td>{{ row.purchase_quantity }}</td>
+                            <td>NGN {{ '{:,}'.format(row.sub_total) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <input type="submit" value="confirm checkout" style="float: right; color: rgb(0, 175, 0); border-color: rgb(0, 175, 0);">
+            <h3>Total = NGN {{ '{:,}'.format(cart_total) }}</h3>
+        </form>
+    </div>
+    
+    <div class="mod-cart" style="display: none;">
+        <form method="POST" class="mod-cart">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table class="u-full-width">
+                <caption>Cart Items</caption>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Purchase Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for row in cart_rows %}
+                        <tr>
+                            <td>{{ row.name }}</td>
+                            <td>{{ row.purchase_quantity }}</td>
+                            <td>{{ '{:,}'.format(row.sub_total) }}</td>
+                            <td><input type="checkbox" name="remove_item" value="{{ row.id }}"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="submit" value="remove" style="float: right;  color: rgb(192, 0, 0); border-color: rgb(192, 0, 0);">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

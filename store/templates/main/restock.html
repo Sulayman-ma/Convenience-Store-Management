@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Restock{% endblock %}
+
+{% block body %}
+
+<div class="menu">
+    <a href="{{ url_for('main.index') }}" class="menu-item button">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item button">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item button button-primary">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item button">Inventory</a>
+</div>
+
+<div class="container u-full-width">
+    <h1>Inventory Restock</h1>
+
+    <form method="POST">
+        {{ restock_form.hidden_tag() }}
+        <table class="u-full-width">
+            <caption>Search and restock an item</caption>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Stock Addition</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>
+                        <input list="item-names" name="item-name" type="text">
+                        <datalist id="item-names">
+                            {% for item in items %}
+                            <option value="{{ item.name }}">
+                            {% endfor %}
+                          </datalist>
+                    </td>
+                    <td>{{ restock_form.addition(placeholder='Stock addition') }}</td>
+                    <td>{{ restock_form.submit() }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+{% endblock %}

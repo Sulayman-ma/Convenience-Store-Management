@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+<div class="menu">
+    <a href="{{ url_for('main.index') }}" class="menu-item button button-primary">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item button">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item button">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item button">Inventory</a>
+</div>
+
+<div class="container">
+    <h1>Store Front</h1>
+    
+    <table class="u-full-width">
+        <caption>Add items to cart</caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Available Stock</th>
+                <th>Purchase Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for item in items %}
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <tr>
+                    <td><input type="text" name="id" value="{{ item.id }}" readonly></td>
+                    <td>{{ item.name }}</td>
+                    <td>NGN {{ '{:,}'.format(item.price) }}</td>
+                    <td>{{ item.stock }}</td>
+                    <td><input type="number" value="0" name="quantity" placeholder="Quantity"></td>
+                    <td><input type="submit" value="Add"></td>
+                </tr>
+            </form>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('main.cart') }}" class="menu-item">
+        <img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">
+        <sub><a href='https://pngtree.com/so/cartoon'>from pngtree</a></sub>
+    </a>
+</div>
+
+{% endblock %}
