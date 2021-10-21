@@ -1,45 +1,3 @@
-.delete {
-  background-color: red;
-  color: white;
-}
-
-.menu {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0 20px 0;
-}
-
-.menu-item {
-  margin: 0 10px;
-}
-
-.closeBtn {
-  position: relative;
-  top: 0;
-  right: 0;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.info {
-  color: blue;
-}
-
-.error {
-  color: rgb(255, 30, 30);
-}
-
-.success {
-  color: rgb(0, 148, 0);
-}
-
-.img-icon {
-  width: 7%;
-}
-
 /*
 * Skeleton V2.0.4
 * Copyright 2014, Dave Gamache
@@ -371,10 +329,10 @@
     border-bottom: 1px solid #E1E1E1; }
   th:first-child,
   td:first-child {
-    padding-left: 0; }
+    padding-left: 5px; }
   th:last-child,
   td:last-child {
-    padding-right: 0; }
+    padding-right: 5px; }
   
   
   /* Spacing

@@ -37,7 +37,7 @@
                 {% endfor %} 
             </tbody>
         </table>
-        <input type="submit" value="Delete Items">
+        <input type="submit" class="delete" value="Delete Items">
 
         {% for categ, msg in get_flashed_messages(with_categories=True) %}
         <div class="flash">

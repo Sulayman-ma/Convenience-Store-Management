@@ -36,7 +36,7 @@
                         </select>
                     </td>
                     <td>{{ restock_form.addition(placeholder='Stock addition') }}</td>
-                    <td>{{ restock_form.submit() }}</td>
+                    <td>{{ restock_form.submit(class='confirm') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -46,6 +46,12 @@
             <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
         </div>
         {% endfor %}
+
+        <ul>
+            {% for item in low_stock_items %}
+            <li>{{ item.name }} ➡ {{ item.stock }} left</li>
+            {% endfor %}
+        </ul>
     </form>
 </div>
 

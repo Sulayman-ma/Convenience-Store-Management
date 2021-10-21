@@ -27,6 +27,19 @@ class Item(db.Model):
         if self.stock == 0:
             self.sold_out = True
 
+    def verify_stock_status(self):
+        if self.stock <= (0.2 * self.post_restock):
+            self.low_stock = True
+        if self.stock == 0:
+            self.sold_out = True
+
+    def restock(self, addition):
+        self.stock += addition
+        # set post restock to keep track of how low stock is
+        self.post_restock = self.stock
+        self.sold_out = False
+        self.low_stock = False
+
 
 class CartRow(db.Model):
     __tablename__ = 'cart'

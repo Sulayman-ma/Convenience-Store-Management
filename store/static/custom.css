@@ -1,0 +1,72 @@
+input.delete {
+    background-image: linear-gradient(to right, rgb(131, 0, 0), rgb(187, 0, 0));
+    color: rgb(255, 255, 255);
+}
+
+input.modify {
+    background-image: linear-gradient(to right, rgb(194, 94, 1), rgb(219, 117, 0));
+    color: rgb(255, 255, 255);
+}
+
+input.confirm {
+    background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
+    color: rgb(255, 255, 255);
+}
+
+input.add {
+    background-image: linear-gradient(to right, rgb(10, 0, 143), rgb(15, 0, 219));
+    color: rgb(255, 255, 255);
+}
+
+input.add :hover {
+    background-color: rgb(0, 0, 235);
+    color: rgb(255, 255, 255);
+}
+
+input.pointer {
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 20px 0;
+}
+
+.menu-item {
+    margin: 0 10px;
+}
+
+.info {
+    color: blue;
+}
+
+.error {
+    color: rgb(255, 30, 30);
+}
+
+.success {
+    color: rgb(0, 148, 0);
+}
+
+.misc {
+    color: rgb(255, 94, 0);
+}
+
+.warning {
+    color: rgb(255, 94, 0);
+    font-size: large;
+}
+
+.img-icon {
+    width: 7%;
+}
+
+tr:nth-child(even){
+    background-color: #f3f3f3;
+}
+
+th {
+    background-color: darkgray;
+}

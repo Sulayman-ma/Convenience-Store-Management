@@ -35,9 +35,24 @@
                     <td><input type="text" name="id" value="{{ item.id }}" readonly></td>
                     <td>{{ item.name }}</td>
                     <td>NGN {{ '{:,}'.format(item.price) }}</td>
+
+                    {% if item.low_stock %}
+                        {% if not item.sold_out %}
+                            <td class="misc">{{ item.stock }}</td>
+                            <td><input type="number" value="0" name="quantity"></td>
+                            <td><input type="submit" class="add" value="Add"></td>
+                        {% else %}
+                            <td style="font: small-caps;" class="error">SOLD OUT</td>
+                            <td><input type="number" value="0" name="quantity" disabled></td>
+                            <td><input type="submit" class="add" value="Add" disabled></td>
+                        {% endif %}
+
+                    {% else %}
+
                     <td>{{ item.stock }}</td>
-                    <td><input type="number" value="0" name="quantity" placeholder="Quantity"></td>
-                    <td><input type="submit" value="Add"></td>
+                    <td><input type="number" value="0" name="quantity"></td>
+                    <td><input type="submit" class="add" value="Add"></td>
+                    {% endif %}
                 </tr>
             </form>
             {% endfor %}
@@ -50,10 +65,13 @@
         {% endfor %}
     </table>
 
-    <a href="{{ url_for('main.cart') }}" class="menu-item">
-        <img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">
-        <sub><a href='https://pngtree.com/so/cartoon'>from pngtree</a></sub>
-    </a>
+    <h3>
+        <a href="{{ url_for('main.cart') }}" class="menu-item">
+            <img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">
+            Checkout ➡
+        </a>
+    </h3>
+    
 </div>
 
 {% endblock %}

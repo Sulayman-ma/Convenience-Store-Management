@@ -1,5 +1,5 @@
 function modifyCart() {
-    if(event.target.className == 'mod-switch') {
+    if(event.target.classList.contains('mod-switch')) {
         modCart.setAttribute('style', 'display: block;')
         mainCart.setAttribute('style', 'display: none;')
     } else {
