@@ -62,7 +62,7 @@ def cart():
                 db.session.delete(row)
             # commit session and redirect
             db.session.commit()
-            return redirect(url_for('.cart'))
+            return redirect(url_for('.index'))
 
         """Delete items from cart"""
         # loop though list and delete each item from DB
@@ -70,7 +70,7 @@ def cart():
             cart_row = CartRow.query.get(int(row))
             db.session.delete(cart_row)
         db.session.commit()
-        return redirect(url_for('.index'))
+        return redirect(url_for('.cart'))
     return render_template('main/cart.html', cart_rows = cart_rows, cart_total = cart_total)
 
 
