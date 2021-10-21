@@ -35,6 +35,12 @@
                 </tr>
             </tbody>
         </table>
+
+        {% for categ, msg in get_flashed_messages(with_categories=True) %}
+        <div class="flash">
+            <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+        </div>
+        {% endfor %}
     </form>
 </div>
 

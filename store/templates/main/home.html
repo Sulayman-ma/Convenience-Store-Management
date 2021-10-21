@@ -42,6 +42,12 @@
             </form>
             {% endfor %}
         </tbody>
+
+        {% for categ, msg in get_flashed_messages(with_categories=True) %}
+        <div class="flash">
+            <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+        </div>
+        {% endfor %}
     </table>
 
     <a href="{{ url_for('main.cart') }}" class="menu-item">

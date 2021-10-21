@@ -38,6 +38,13 @@
 
             <input type="submit" value="confirm checkout" style="float: right; color: rgb(0, 175, 0); border-color: rgb(0, 175, 0);">
             <h3>Total = NGN {{ '{:,}'.format(cart_total) }}</h3>
+
+            {% for categ, msg in get_flashed_messages(with_categories=True) %}
+            <div class="flash">
+                <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+                <img src="{{ url_for('static', filename='success.png') }}" alt="success green tick" class="img-icon">
+            </div>
+            {% endfor %}
         </form>
     </div>
     

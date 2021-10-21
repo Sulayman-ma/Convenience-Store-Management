@@ -38,6 +38,12 @@
             </tbody>
         </table>
         <input type="submit" value="Delete Items">
+
+        {% for categ, msg in get_flashed_messages(with_categories=True) %}
+        <div class="flash">
+            <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+        </div>
+        {% endfor %}
     </form>
     {% else %}
     <h3>No items yet! <a href="{{ url_for('main.create_item') }}">Create a new item</a> and see it appear here.</h3>

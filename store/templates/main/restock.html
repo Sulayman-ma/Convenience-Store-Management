@@ -29,18 +29,23 @@
             <tbody>
                 <tr>
                     <td>
-                        <input list="item-names" name="item-name" type="text">
-                        <datalist id="item-names">
+                        <select name="item-name">
                             {% for item in items %}
-                            <option value="{{ item.name }}">
+                            <option value="{{ item.name }}">{{ item.name }}</option>
                             {% endfor %}
-                          </datalist>
+                        </select>
                     </td>
                     <td>{{ restock_form.addition(placeholder='Stock addition') }}</td>
                     <td>{{ restock_form.submit() }}</td>
                 </tr>
             </tbody>
         </table>
+
+        {% for categ, msg in get_flashed_messages(with_categories=True) %}
+        <div class="flash">
+            <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+        </div>
+        {% endfor %}
     </form>
 </div>
 
