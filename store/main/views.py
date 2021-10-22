@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request, flash, current_app
 from . import main
 from .. import db
-from .forms import CreateItem, RestockItems
+from .forms import CreateItem, RestockItems, ModifyItem
 from ..models import Item, CartRow
 
 
@@ -35,7 +35,7 @@ def index():
         item = Item.query.get(id)
         cart_product = CartRow.query.get(id)
         
-        # if item exists in the cart
+        # item exists in the cart
         if cart_product:
             if (quantity + cart_product.purchase_quantity) > item.stock:
                 flash('⚠ Purchase quantity must be less than or equal to stock quantity', 'misc')
@@ -72,9 +72,9 @@ def cart():
     if request.method == 'POST':
         row_ids = request.form.getlist('remove_item')
 
-        # if no items are selected for deletion
+        # no items are selected for deletion
         if row_ids == []:
-            # if cart table contains items, proceed to checkout
+            # cart table contains items, proceed to checkout
             if cart_rows:
                 """Confirm checkout logic. 
                 
@@ -176,21 +176,48 @@ def restock():
 def manage_items():
     items = Item.query.all()
     low_stock_items = filter_low_stock(items)
+    modded_item = None
 
     if request.method == 'POST':
-        # list of checked boxes
-        ids = request.form.getlist('item')
-        if ids == []:
-            flash('Please select at least one item.', 'info')
+        # item(s) selected for deletion
+        selected_ids = request.form.getlist('delete')
+        if selected_ids != []:
+            to_be_removed = [Item.query.get(id) for id in selected_ids]
+            for item in to_be_removed:
+                db.session.delete(item)
+            db.session.commit()
+            flash('Item(s) removed ✔', 'success')
             return redirect(url_for('.manage_items'))
+        # if no items selected, check if a modification was made
+        elif selected_ids == []:
+            item_id = int(request.form.get('item_id'))
+            modded_stock = int(request.form.get('modded_stock'))
+            modded_price = float(request.form.get('modded_price'))
 
-        to_be_removed = [Item.query.get(id) for id in ids]
+            # query item
+            item = Item.query.get(item_id)
+            old_details = (item.price, item.stock)
+            # check if no changes were made
+            if item.price == modded_price and item.stock == modded_stock:
+                flash('⚠ No changes were made', 'misc') 
+                return redirect(url_for('.manage_items'))
+            else:
+                # make changes otherwise
+                modded_item = item
+                modded_item.price = modded_price
+                modded_item.stock = modded_stock
+                modded_item.post_restock = modded_stock
+                modded_item.verify_stock_status()
 
-        for item in to_be_removed:
-            db.session.delete(item)
-        db.session.commit()
-        flash('Item(s) removed ✔', 'success')
-        return redirect(url_for('.manage_items'))
+                # add to DB and commit
+                db.session.add(modded_item)
+                db.session.commit()
+                flash('ℹ Changes applied to {} >>> Price - {:,} to {:,} || Stock {} - {} '.format(
+                    item.name, old_details[0], modded_price, old_details[1], modded_stock
+                ), 'info')
+        else:
+            flash('ℹ Empty action. Please modify an item or select for deletion', 'info')
+            return redirect(url_for('.manage_items'))
 
     if low_stock_items:
         flash('⚠ Some items are low on stock. Please visit the restock page to see them ⚠', 'warning')

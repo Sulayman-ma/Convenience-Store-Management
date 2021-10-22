@@ -1,6 +1,5 @@
 function search() {
     var input, query, rows;
-
     input = document.querySelector('#searchBtn')
 
     // search query

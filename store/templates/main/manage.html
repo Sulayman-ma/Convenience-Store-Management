@@ -20,11 +20,17 @@
         <input type="text" onkeyup="search()" placeholder="Search for an item..." id="searchBtn">
     </div>
 
+    {% for categ, msg in get_flashed_messages(with_categories=True) %}
+    <div class="flash">
+        <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+    </div>
+    {% endfor %}
+
     <input type="button" value="Modify Items 🖊" class="modify-btn active" onclick="modifyItems()">
     <input type="button" value="Remove Items 🚮" class="remove-btn active" onclick="modifyItems()">
 
     {% if items == [] %}
-    <h3>Inventory is empty :( <a href="{{ url_for('main.create_item') }}">Create a new item</a> and see it appear here.</h3>
+    <h3>Inventory is empty 😟 <a href="{{ url_for('main.create_item') }}">Create a new item</a> and see it appear here.</h3>
 
     {% else %}
 
@@ -47,7 +53,7 @@
                         <td>{{ item.name }}</td>
                         <td>NGN {{ '{:,}'.format(item.price) }}</td>
                         <td>{{ item.stock }}</td>
-                        <td><input class="pointer" type="checkbox" name="item" value="{{ item.id }}"></td>
+                        <td><input class="pointer" type="checkbox" name="delete" value="{{ item.id }}"></td>
                     </tr>
                     {% endfor %} 
                 </tbody>
@@ -56,39 +62,38 @@
             <div class="center-button">
                 <input type="submit" class="delete remove" value="Delete Items">
             </div>
-            
         </form>
     </div>
 
-    <div class="modify-items" style="display: none;">
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <table class="u-full-width">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Item Name</th>
-                        <th>Price</th>
-                        <th>Available Stock</th>
-                    </tr>
-                </thead>
-    
-                <tbody>
-                    {% for item in items %}
-                    <tr>
-                        <td><input type="text" value="{{ item.id }}" readonly></td>
-                        <td><input type="text" value="{{ item.name }}"></td>
-                        <td>NGN <input type="number" value="{{ item.price }}"></td>
-                        <td><input type="number" value="{{ item.stock }}"></td>
-                    </tr>
-                    {% endfor %} 
-                </tbody>
-            </table>
 
-            <div class="center-button">
-                <input type="submit" class="confirm active" value="Apply Changes">
-            </div>
-        </form>
+    <div class="modify-items" style="display: none;">
+        <table class="u-full-width">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th style="width: 15%;">Available Stock</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in items %}
+                <tr class="item-row {{ item.name }}">
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                        <td><input type="text" style="width: 100%;" name="item_id" value="{{ item.id }}" readonly></td>
+                        <td><input type="text" value="{{ item.name }}" readonly></td>
+                        <td>NGN <input type="number" name="modded_price" value="{{ item.price }}"></td>
+                        <td><input type="number" style="width: 100%;" name="modded_stock" value="{{ item.stock }}"></td>
+                        <td><input type="submit" value="Apply" class="confirm active"></td>
+                    </form>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
     </div>    
     {% endif %}
 </div>
