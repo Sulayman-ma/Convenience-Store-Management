@@ -7,8 +7,8 @@
 <div class="container">
     <h1><img src="{{ url_for('static', filename='img/cart.png') }}" alt="cart-icon" class="img-icon">Checkout Cart</h1>
 
-    <input type="button" value="Modify Cart 🖊" class="mod-switch active">
-    <input type="button" value="Resume Checkout 🛒" class="res-switch active">
+    <input type="button" value="Modify Cart 🖊" class="mod-switch active" onclick="modifyCart()">
+    <input type="button" value="Resume Checkout 🛒" class="res-switch active" onclick="modifyCart()">
 
     <a style="float: right;" href="{{ url_for('.index') }}">Go back ⬅</a>
 
@@ -82,25 +82,5 @@
         </form>
     </div>
 </div>
-
-<script>
-    function modifyCart() {
-        var mainCart = document.querySelector('.main-cart')
-        var modCart = document.querySelector('.mod-cart')
-
-        if(event.target.classList.contains('mod-switch')) {
-            modCart.setAttribute('style', 'display: block;')
-            mainCart.setAttribute('style', 'display: none;')
-        } else {
-            modCart.setAttribute('style', 'display: none;')
-            mainCart.setAttribute('style', 'display: block;')
-        }
-    }
-
-    var modSwitch = document.querySelector('.mod-switch')
-    var resSwitch = document.querySelector('.res-switch')
-    modSwitch.addEventListener('click', modifyCart)
-    resSwitch.addEventListener('click', modifyCart)
-</script>
 
 {% endblock %}

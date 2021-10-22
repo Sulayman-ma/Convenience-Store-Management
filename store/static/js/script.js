@@ -19,6 +19,7 @@ function search() {
     }
 }
 
+
 function modifyItems() {
     var removeForm, modForm
 
@@ -31,5 +32,20 @@ function modifyItems() {
     } else {
         removeForm.setAttribute('style', 'display: block;')
         modForm.setAttribute('style', 'display: none;')
+    }
+}
+
+
+function modifyCart() {
+    var mainCart, modCart
+    mainCart = document.querySelector('.main-cart')
+    modCart = document.querySelector('.mod-cart')
+
+    if(event.target.classList.contains('mod-switch')) {
+        modCart.setAttribute('style', 'display: block;')
+        mainCart.setAttribute('style', 'display: none;')
+    } else {
+        modCart.setAttribute('style', 'display: none;')
+        mainCart.setAttribute('style', 'display: block;')
     }
 }
