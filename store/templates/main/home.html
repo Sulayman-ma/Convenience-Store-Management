@@ -16,56 +16,50 @@
 <div class="container">
     <h1>Store Front</h1>
 
-    <!-- SEARCH BAR -->
     <div class="center-button">
-        <form method="POST">
-            {{ search.hidden_tag() }}
-            {{ search.query(placeholder='Search for an item...') }}
-            {{ search.submit() }}
-        </form>
+        <input type="text" onkeyup="search()" placeholder="Search for an item..." id="searchBtn">
     </div>
     
     <table class="u-full-width">
         <caption>Add items to cart</caption>
         <thead>
             <tr>
-                <th>ID</th>
+                <th style="width: 10%;">ID</th>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Available Stock</th>
-                <th>Purchase Quantity</th>
+                <th style="width: 20%;">Purchase Quantity</th>
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
             {% for item in items %}
-            <form class="item-form {{ item.name }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <tr>
-                    <td><input type="text" name="id" value="{{ item.id }}" readonly></td>
+            <tr class="item-row {{ item.name }}">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <td><input type="text" name="id" value="{{ item.id }}" style="width: 100%;" readonly></td>
                     <td class="item-name">{{ item.name }}</td>
                     <td>NGN {{ '{:,}'.format(item.price) }}</td>
 
-                    {% if item.low_stock %}
-                        {% if not item.sold_out %}
-                            <td class="misc">{{ item.stock }}</td>
-                            <td><input type="number" value="0" name="quantity"></td>
-                            <td><input type="submit" class="confirm active" value="Add"></td>
-                        {% else %}
-                            <td style="font: small-caps;" class="error">SOLD OUT</td>
-                            <td><input type="number" value="0" name="quantity" disabled></td>
-                            <td><input type="submit" class="confirm active" value="Add" disabled></td>
-                        {% endif %}
-
+                    {% if item.low_stock and not item.sold_out %}
+                    <td class="misc">{{ item.stock }}</td>
+                    {% elif item.sold_out %}
+                    <td style="font: small-caps;" class="error">SOLD OUT</td>
                     {% else %}
-
                     <td>{{ item.stock }}</td>
-                    <td><input type="number" value="0" name="quantity"></td>
+                    {% endif %}
+
+                    {% if item.sold_out %}
+                    <td><input type="number" style="width: 100%;" value="0" name="quantity" disabled></td>
+                    <td><input type="submit" class="confirm active" value="Add" disabled></td>
+                    {% else %}
+                    <td><input type="number" style="width: 100%;" value="0" name="quantity"></td>
                     <td><input type="submit" class="confirm active" value="Add"></td>
                     {% endif %}
-                </tr>
-            </form>
+                </form>
+            </tr>
             {% endfor %}
         </tbody>
 
@@ -78,31 +72,11 @@
 
     <h3>
         <a href="{{ url_for('main.cart') }}" class="menu-item cart" style="color: black; text-decoration: none;">
-            <img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">
+            <img src="{{ url_for('static', filename='img/cart.png') }}" alt="cart-icon" class="img-icon">
             Checkout ➡
         </a>
     </h3>
     
 </div>
-
-<!-- <script>
-    function search() {
-        var input, filter, forms, row, td;
-
-        input = document.querySelector('#searchBar');
-        console.log(input);
-        filter = input.value.toUpperCase();
-        
-        // list of all item forms
-        forms = Array.from(document.querySelectorAll('.item-form'))
-        console.log(forms);
-
-        forms.forEach(element => {
-            // console.log(element);
-            row = element.querySelector('tr')
-            console.log(row);
-        })
-    }
-</script> -->
 
 {% endblock %}

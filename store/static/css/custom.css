@@ -110,7 +110,7 @@ input.active {
 }
 
 a.active:hover {
-    background-image: linear-gradient(to right, rgb(27, 163, 0),rgb(59, 209, 0));
+    background-image: linear-gradient(to right, rgb(34, 202, 0),rgb(59, 209, 0));
 }
 
 input.active:hover {

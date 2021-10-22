@@ -9,34 +9,17 @@ from ..models import Item, CartRow
 @main.route('/favicon.ico')
 def favicon():
     """Adding a favicon to the app. This method is stress. Flask should be ashamed."""
-    return current_app.send_static_file('favicon.ico')
+    return current_app.send_static_file('img/favicon.ico')
 
 
 def filter_low_stock(items):
     return [item for item in items if item.low_stock]
-
-# ''.startswith
-def filter_search(items, query):
-    names = [item.name.upper() for item in items]
-    return names
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
     items = Item.query.all()
     low_stock_items = filter_low_stock(items)
-    search = Search()
-
-    # if search.validate_on_submit():
-    #     query = search.query.data.strip()
-    #     if query == "":
-    #         flash('⚠ Please enter a valid search query', 'misc')
-    #         return redirect(url_for('.index'))
-
-    #     items = Item.query.all()
-    #     results = filter_search(items, query)
-    #     current_app.logger.info(results)
-    #     return render_template('main/home.html', search = search, items = results)
 
     if request.method == 'POST':
         # take the form's ID and quantity fields
@@ -78,7 +61,7 @@ def index():
     
     if low_stock_items:
         flash('⚠ Some items are low on stock. Please visit the restock page to see them ⚠', 'warning')
-    return render_template('main/home.html', items = items, search = search)
+    return render_template('main/home.html', items = items)
 
 
 @main.route('/cart', methods=['GET', 'POST'])
@@ -130,7 +113,7 @@ def cart():
 
 @main.route('/create', methods=['GET', 'POST'])
 def create_item():
-    items = list(Item.query.all())
+    items = Item.query.all()
     # most recent item ID
     if items == []:
         next_id = 1
