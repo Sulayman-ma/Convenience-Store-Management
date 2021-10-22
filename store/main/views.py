@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request, flash, current_app
 from . import main
 from .. import db
-from .forms import CreateItem, RestockItems, Search
+from .forms import CreateItem, RestockItems
 from ..models import Item, CartRow
 
 
