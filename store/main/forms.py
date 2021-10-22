@@ -16,8 +16,3 @@ class CreateItem(FlaskForm):
 class RestockItems(FlaskForm):
     addition = IntegerField()
     submit = SubmitField('Confirm Restock')
-
-
-class Search(FlaskForm):
-    query = StringField()
-    submit = SubmitField('🔍')
