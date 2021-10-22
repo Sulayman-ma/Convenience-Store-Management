@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request, flash, current_app
 from . import main
 from .. import db
-from .forms import CreateItem, RestockItems
+from .forms import CreateItem, RestockItems, Search
 from ..models import Item, CartRow
 
 
@@ -15,40 +15,70 @@ def favicon():
 def filter_low_stock(items):
     return [item for item in items if item.low_stock]
 
+# ''.startswith
+def filter_search(items, query):
+    names = [item.name.upper() for item in items]
+    return names
+
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
     items = Item.query.all()
     low_stock_items = filter_low_stock(items)
+    search = Search()
+
+    # if search.validate_on_submit():
+    #     query = search.query.data.strip()
+    #     if query == "":
+    #         flash('⚠ Please enter a valid search query', 'misc')
+    #         return redirect(url_for('.index'))
+
+    #     items = Item.query.all()
+    #     results = filter_search(items, query)
+    #     current_app.logger.info(results)
+    #     return render_template('main/home.html', search = search, items = results)
 
     if request.method == 'POST':
         # take the form's ID and quantity fields
         id = int(request.form.get('id'))
         quantity = int(request.form.get('quantity'))
 
-        # query the item
-        item = Item.query.get(id)
         # prevent invalid entries
-        if quantity == 0:
-            flash('ℹ Please enter a valid purchase amount', 'info')
-            return redirect(url_for('.index'))
-        if quantity < 0 or quantity > item.stock:
-            flash('Invalid purchase quantity ❌', 'error')
+        if quantity <= 0:
+            flash('⚠ Please enter a valid purchase quantity', 'misc')
             return redirect(url_for('.index'))
 
-        # create cart item from above data and add to DB session and commit
-        cart_row = CartRow(id = id,
-                            name = item.name,
-                            purchase_quantity = quantity,
-                            sub_total = quantity * item.price)
-        db.session.add(cart_row)
+        # query id from both tables
+        item = Item.query.get(id)
+        cart_product = CartRow.query.get(id)
+        
+        # if item exists in the cart
+        if cart_product:
+            if (quantity + cart_product.purchase_quantity) > item.stock:
+                flash('⚠ Purchase quantity must be less than or equal to stock quantity', 'misc')
+                return redirect(url_for('.index'))
+            cart_product.purchase_quantity += quantity
+            cart_product.calculate_sub_total(item.price)
+            db.session.add(cart_product)
+            flash('ℹ {}\'s purchase quantity increased'.format(item.name), 'info')
+        # item does not exist in the cart
+        else:
+            if quantity > item.stock:
+                flash('⚠ Purchase quantity must be less than or equal to stock quantity', 'misc')
+                return redirect(url_for('.index'))
+            # create cart item from above data and add to DB session and commit
+            cart_row = CartRow(id = id,
+                                name = item.name,
+                                purchase_quantity = quantity,
+                                sub_total = quantity * item.price)
+            db.session.add(cart_row)
+            flash('ℹ {} added to cart'.format(item.name), 'info')
         db.session.commit()
-        flash('ℹ {} added to cart'.format(item.name), 'info')
         return redirect(url_for('.index'))
     
     if low_stock_items:
         flash('⚠ Some items are low on stock. Please visit the restock page to see them ⚠', 'warning')
-    return render_template('main/home.html', items = items)
+    return render_template('main/home.html', items = items, search = search)
 
 
 @main.route('/cart', methods=['GET', 'POST'])
@@ -62,7 +92,7 @@ def cart():
         # if no items are selected for deletion
         if row_ids == []:
             # if cart table contains items, proceed to checkout
-            if cart_rows != []:
+            if cart_rows:
                 """Confirm checkout logic. 
                 
                 Basically applies purchase quantities and updates item stock counts, then proceeds to empty cart table"""
@@ -78,9 +108,10 @@ def cart():
                 # empty cart table
                 for row in cart_rows:
                     db.session.delete(row)
+
                 # commit session and redirect
                 db.session.commit()
-                flash('Checkout Complete! Return to Store Front.', 'success')
+                flash('Checkout Complete! Return to Store Front ✔🧾', 'success')
                 return redirect(url_for('.cart'))
             else:
                 flash('Cart is empty 🛒✖', 'error')
@@ -93,7 +124,7 @@ def cart():
                 db.session.delete(cart_row)
             db.session.commit()
             return redirect(url_for('.cart'))
-        
+
     return render_template('main/cart.html', cart_rows = cart_rows, cart_total = cart_total)
 
 

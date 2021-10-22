@@ -5,11 +5,13 @@
 {% block body %}
 
 <div class="menu">
-    <a href="{{ url_for('main.index') }}" class="menu-item button">Store Home</a>
-    <a href="{{ url_for('main.create_item') }}" class="menu-item button">Create New Item</a>
-    <a href="{{ url_for('main.restock') }}" class="menu-item button button-primary">Restock Items</a>
-    <a href="{{ url_for('main.manage_items') }}" class="menu-item button">Inventory</a>
+    <a href="{{ url_for('main.index') }}" class="menu-item btn">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item btn">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item btn btn active">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item btn">Inventory</a>
 </div>
+
+<hr>
 
 <div class="container u-full-width">
     <h1>Inventory Restock</h1>
@@ -36,7 +38,7 @@
                         </select>
                     </td>
                     <td>{{ restock_form.addition(placeholder='Stock addition') }}</td>
-                    <td>{{ restock_form.submit(class='confirm') }}</td>
+                    <td>{{ restock_form.submit(class='confirm active') }}</td>
                 </tr>
             </tbody>
         </table>

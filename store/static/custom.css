@@ -18,9 +18,8 @@ input.add {
     color: rgb(255, 255, 255);
 }
 
-input.add :hover {
-    background-color: rgb(0, 0, 235);
-    color: rgb(255, 255, 255);
+.delete:hover {
+    color: white;
 }
 
 input.pointer {
@@ -69,4 +68,63 @@ tr:nth-child(even){
 
 th {
     background-color: darkgray;
+}
+
+h1 {
+    color: rgb(56, 56, 56);
+}
+
+.center-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+a.btn {
+    display: inline-block;
+    height: 38px;
+    padding: 0 30px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    box-sizing: border-box;
+    color: black;
+}
+
+a.active {
+    background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
+    color: rgb(255, 255, 255);
+}
+
+input.active {
+    background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
+    color: rgb(255, 255, 255);
+}
+
+a.active:hover {
+    background-image: linear-gradient(to right, rgb(27, 163, 0),rgb(59, 209, 0));
+}
+
+input.active:hover {
+    background-image: linear-gradient(to right, rgb(27, 163, 0),rgb(59, 209, 0));
+}
+
+a.btn:hover {
+    background-color: darkgrey;
+}
+
+a.cart:hover {
+    color: rgb(59, 209, 0);
+}
+
+input.remove:hover {
+    background-image: linear-gradient(to right, rgb(187, 0, 0), rgb(230, 0, 0));
 }

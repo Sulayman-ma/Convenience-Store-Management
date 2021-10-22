@@ -5,14 +5,25 @@
 {% block body %}
 
 <div class="menu">
-    <a href="{{ url_for('main.index') }}" class="menu-item button button-primary">Store Home</a>
-    <a href="{{ url_for('main.create_item') }}" class="menu-item button">Create New Item</a>
-    <a href="{{ url_for('main.restock') }}" class="menu-item button">Restock Items</a>
-    <a href="{{ url_for('main.manage_items') }}" class="menu-item button">Inventory</a>
+    <a href="{{ url_for('main.index') }}" class="menu-item btn active">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item btn">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item btn">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item btn">Inventory</a>
 </div>
+
+<hr>
 
 <div class="container">
     <h1>Store Front</h1>
+
+    <!-- SEARCH BAR -->
+    <div class="center-button">
+        <form method="POST">
+            {{ search.hidden_tag() }}
+            {{ search.query(placeholder='Search for an item...') }}
+            {{ search.submit() }}
+        </form>
+    </div>
     
     <table class="u-full-width">
         <caption>Add items to cart</caption>
@@ -26,32 +37,32 @@
                 <th></th>
             </tr>
         </thead>
-        
+
         <tbody>
             {% for item in items %}
-            <form method="POST">
+            <form class="item-form {{ item.name }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <tr>
                     <td><input type="text" name="id" value="{{ item.id }}" readonly></td>
-                    <td>{{ item.name }}</td>
+                    <td class="item-name">{{ item.name }}</td>
                     <td>NGN {{ '{:,}'.format(item.price) }}</td>
 
                     {% if item.low_stock %}
                         {% if not item.sold_out %}
                             <td class="misc">{{ item.stock }}</td>
                             <td><input type="number" value="0" name="quantity"></td>
-                            <td><input type="submit" class="add" value="Add"></td>
+                            <td><input type="submit" class="confirm active" value="Add"></td>
                         {% else %}
                             <td style="font: small-caps;" class="error">SOLD OUT</td>
                             <td><input type="number" value="0" name="quantity" disabled></td>
-                            <td><input type="submit" class="add" value="Add" disabled></td>
+                            <td><input type="submit" class="confirm active" value="Add" disabled></td>
                         {% endif %}
 
                     {% else %}
 
                     <td>{{ item.stock }}</td>
                     <td><input type="number" value="0" name="quantity"></td>
-                    <td><input type="submit" class="add" value="Add"></td>
+                    <td><input type="submit" class="confirm active" value="Add"></td>
                     {% endif %}
                 </tr>
             </form>
@@ -66,12 +77,32 @@
     </table>
 
     <h3>
-        <a href="{{ url_for('main.cart') }}" class="menu-item">
+        <a href="{{ url_for('main.cart') }}" class="menu-item cart" style="color: black; text-decoration: none;">
             <img src="{{ url_for('static', filename='cart.png') }}" alt="cart-icon" class="img-icon">
             Checkout ➡
         </a>
     </h3>
     
 </div>
+
+<!-- <script>
+    function search() {
+        var input, filter, forms, row, td;
+
+        input = document.querySelector('#searchBar');
+        console.log(input);
+        filter = input.value.toUpperCase();
+        
+        // list of all item forms
+        forms = Array.from(document.querySelectorAll('.item-form'))
+        console.log(forms);
+
+        forms.forEach(element => {
+            // console.log(element);
+            row = element.querySelector('tr')
+            console.log(row);
+        })
+    }
+</script> -->
 
 {% endblock %}

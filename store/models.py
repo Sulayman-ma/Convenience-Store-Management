@@ -55,3 +55,6 @@ class CartRow(db.Model):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def calculate_sub_total(self, price):
+        self.sub_total = price * self.purchase_quantity

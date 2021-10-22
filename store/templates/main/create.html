@@ -4,11 +4,13 @@
 
 {% block body %}
 <div class="menu">
-    <a href="{{ url_for('main.index') }}" class="menu-item button">Store Home</a>
-    <a href="{{ url_for('main.create_item') }}" class="menu-item button button-primary">Create New Item</a>
-    <a href="{{ url_for('main.restock') }}" class="menu-item button">Restock Items</a>
-    <a href="{{ url_for('main.manage_items') }}" class="menu-item button">Inventory</a>
+    <a href="{{ url_for('main.index') }}" class="menu-item btn">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item btn active">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item btn">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item btn">Inventory</a>
 </div>
+
+<hr>
 
 <div class="container">
     <h1>Create Item</h1>
@@ -31,7 +33,7 @@
                     <td>{{ create.name(placeholder='Item Name') }}</td>
                     <td>{{ create.price(placeholder='Price') }}</td>
                     <td>{{ create.stock(placeholder='Stock') }}</td>
-                    <td>{{ create.submit(class='confirm') }}</td>
+                    <td>{{ create.submit(class='confirm active') }}</td>
                 </tr>
             </tbody>
         </table>

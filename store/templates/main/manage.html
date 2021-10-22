@@ -5,49 +5,113 @@
 {% block body %}
 
 <div class="menu">
-    <a href="{{ url_for('main.index') }}" class="menu-item button">Store Home</a>
-    <a href="{{ url_for('main.create_item') }}" class="menu-item button">Create New Item</a>
-    <a href="{{ url_for('main.restock') }}" class="menu-item button">Restock Items</a>
-    <a href="{{ url_for('main.manage_items') }}" class="menu-item button button-primary">Inventory</a>
+    <a href="{{ url_for('main.index') }}" class="menu-item btn">Store Home</a>
+    <a href="{{ url_for('main.create_item') }}" class="menu-item btn">Create New Item</a>
+    <a href="{{ url_for('main.restock') }}" class="menu-item btn">Restock Items</a>
+    <a href="{{ url_for('main.manage_items') }}" class="menu-item btn active">Inventory</a>
 </div>
+
+<hr>
 
 <div class="container u-full-width">
     <h1>Inventory Management</h1>
+
+    <input type="button" value="Modify Items 🖊" class="modify-btn active">
+    <input type="button" value="Remove Items 🚮" class="remove-btn active">
+
     {% if items != [] %}
-    <form method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <table class="u-full-width">
-            <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Price</th>
-                    <th>Available Stock</th>
-                    <th></th>
-                </tr>
-            </thead>
+    <div class="remove-items">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table class="u-full-width">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                        <th>Available Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>NGN {{ '{:,}'.format(item.price) }}</td>
+                        <td>{{ item.stock }}</td>
+                        <td><input class="pointer" type="checkbox" name="item" value="{{ item.id }}"></td>
+                    </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
 
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>NGN {{ '{:,}'.format(item.price) }}</td>
-                    <td>{{ item.stock }}</td>
-                    <td><input class="pointer" type="checkbox" name="item" value="{{ item.id }}"></td>
-                </tr>
-                {% endfor %} 
-            </tbody>
-        </table>
-        <input type="submit" class="delete" value="Delete Items">
+            <div class="center-button">
+                <input type="submit" class="delete remove" value="Delete Items">
+            </div>
+            
+        </form>
+    </div>
 
-        {% for categ, msg in get_flashed_messages(with_categories=True) %}
-        <div class="flash">
-            <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
-        </div>
-        {% endfor %}
-    </form>
+    <div class="modify-items" style="display: none;">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table class="u-full-width">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                        <th>Available Stock</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td><input type="text" value="{{ item.id }}" readonly></td>
+                        <td><input type="text" value="{{ item.name }}"></td>
+                        <td>NGN <input type="number" value="{{ item.price }}"></td>
+                        <td><input type="number" value="{{ item.stock }}"></td>
+                    </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+
+            <div class="center-button">
+                <input type="submit" class="confirm active" value="Apply Changes">
+            </div>
+        </form>
+    </div>
+
+    {% for categ, msg in get_flashed_messages(with_categories=True) %}
+    <div class="flash">
+        <li style="list-style: none;" class="{{ categ }}">{{ msg }}</li>
+    </div>
+    {% endfor %}
+
     {% else %}
     <h3>No items yet! <a href="{{ url_for('main.create_item') }}">Create a new item</a> and see it appear here.</h3>
     {% endif %}
 </div>
+
+<script>
+    function modifyItems() {
+        var removeForm = document.querySelector('.remove-items')
+        var modForm = document.querySelector('.modify-items')
+
+        if(event.target.classList.contains('modify-btn')) {
+            removeForm.setAttribute('style', 'display: none;')
+            modForm.setAttribute('style', 'display: block;')
+        } else {
+            removeForm.setAttribute('style', 'display: block;')
+            modForm.setAttribute('style', 'display: none;')
+        }
+    }
+
+    var modBtn = document.querySelector('.modify-btn')
+    var remBtn = document.querySelector('.remove-btn')
+    modBtn.addEventListener('click', modifyItems)
+    remBtn.addEventListener('click', modifyItems)
+</script>
 
 {% endblock %}

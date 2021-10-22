@@ -18,7 +18,6 @@ class RestockItems(FlaskForm):
     submit = SubmitField('Confirm Restock')
 
 
-# class AddToCart(FlaskForm):
-#     id = IntegerField()
-#     purchase_quantity = IntegerField()
-#     submit = SubmitField('Add')
+class Search(FlaskForm):
+    query = StringField()
+    submit = SubmitField('🔍')
