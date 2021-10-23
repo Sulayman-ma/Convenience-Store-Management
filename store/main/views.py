@@ -38,7 +38,7 @@ def index():
         # item exists in the cart
         if cart_product:
             if (quantity + cart_product.purchase_quantity) > item.stock:
-                flash('⚠ Purchase quantity must be less than or equal to stock quantity', 'misc')
+                flash('⚠ Insufficient quantity in stock', 'misc')
                 return redirect(url_for('.index'))
             cart_product.purchase_quantity += quantity
             cart_product.calculate_sub_total(item.price)
@@ -47,7 +47,7 @@ def index():
         # item does not exist in the cart
         else:
             if quantity > item.stock:
-                flash('⚠ Purchase quantity must be less than or equal to stock quantity', 'misc')
+                flash('⚠ Insufficient quantity in stock', 'misc')
                 return redirect(url_for('.index'))
             # create cart item from above data and add to DB session and commit
             cart_row = CartRow(id = id,
@@ -60,7 +60,7 @@ def index():
         return redirect(url_for('.index'))
     
     if low_stock_items:
-        flash('⚠ Some items are low on stock. Please visit the restock page to see them ⚠', 'warning')
+        flash('⚠ Some items are low on stock. Please restock as soon as possible ⚠', 'warning')
     return render_template('main/home.html', items = items)
 
 
@@ -189,10 +189,22 @@ def manage_items():
             flash('Item(s) removed ✔', 'success')
             return redirect(url_for('.manage_items'))
         # if no items selected, check if a modification was made
-        elif selected_ids == []:
-            item_id = int(request.form.get('item_id'))
+        else:
+            item_id = (request.form.get('item_id'))
+
+            # either form has been submitted incorrectly
+            if item_id is None:
+                flash('No action was performed', 'misc')
+                return redirect(url_for('.manage_items'))
             modded_stock = int(request.form.get('modded_stock'))
-            modded_price = float(request.form.get('modded_price'))
+            modded_price = request.form.get('modded_price')
+
+            # prevent invalid entiries
+            try:
+                modded_price = float(modded_price)
+            except ValueError:
+                flash('Invalid entry ❌', 'error')
+                return redirect(url_for('.manage_items'))
 
             # query item
             item = Item.query.get(item_id)
@@ -212,13 +224,15 @@ def manage_items():
                 # add to DB and commit
                 db.session.add(modded_item)
                 db.session.commit()
-                flash('ℹ Changes applied to {} >>> Price - {:,} to {:,} || Stock {} - {} '.format(
-                    item.name, old_details[0], modded_price, old_details[1], modded_stock
-                ), 'info')
-        else:
-            flash('ℹ Empty action. Please modify an item or select for deletion', 'info')
-            return redirect(url_for('.manage_items'))
+                flash('ℹ Changes applied to {}:'.format(item.name), 'info')
+                # if price was changed
+                if old_details[0] != modded_price:
+                    flash('\tPrice change [ NGN {:,} to NGN {:,} ]'.format(old_details[0], modded_price), 'info')
+                # if stock was changed
+                if old_details[1] != modded_stock:
+                    flash('\tStock change [ {} to {} ]'.format(old_details[1], modded_stock), 'info')
+                return redirect(url_for('.manage_items'))
 
     if low_stock_items:
-        flash('⚠ Some items are low on stock. Please visit the restock page to see them ⚠', 'warning')
+        flash('⚠ Some items are low on stock. Please restock as soon as possible ⚠', 'warning')
     return render_template('main/manage.html', items = items)

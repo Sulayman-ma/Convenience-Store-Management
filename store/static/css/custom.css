@@ -1,21 +1,31 @@
 input.delete {
     background-image: linear-gradient(to right, rgb(131, 0, 0), rgb(187, 0, 0));
     color: rgb(255, 255, 255);
+    outline: none;
+}
+
+button.delete {
+    background-image: linear-gradient(to right, rgb(131, 0, 0), rgb(187, 0, 0));
+    color: rgb(255, 255, 255);
+    outline: none;
 }
 
 input.modify {
     background-image: linear-gradient(to right, rgb(194, 94, 1), rgb(219, 117, 0));
     color: rgb(255, 255, 255);
+    outline: none;
 }
 
 input.confirm {
     background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
     color: rgb(255, 255, 255);
+    outline: none;
 }
 
 input.add {
     background-image: linear-gradient(to right, rgb(10, 0, 143), rgb(15, 0, 219));
     color: rgb(255, 255, 255);
+    outline: none;
 }
 
 .delete:hover {
@@ -102,11 +112,13 @@ a.btn {
 a.active {
     background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
     color: rgb(255, 255, 255);
+    outline: none;
 }
 
 input.active {
     background-image: linear-gradient(to right, rgb(18, 110, 0),rgb(59, 209, 0));
     color: rgb(255, 255, 255);
+    outline: none;
 }
 
 a.active:hover {
@@ -127,4 +139,18 @@ a.cart:hover {
 
 input.remove:hover {
     background-image: linear-gradient(to right, rgb(187, 0, 0), rgb(230, 0, 0));
+}
+
+button.remove:hover {
+    background-image: linear-gradient(to right, rgb(187, 0, 0), rgb(230, 0, 0));
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darkgray;
+    border-radius: 20px;
 }
