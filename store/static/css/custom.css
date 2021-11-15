@@ -1,3 +1,14 @@
+.top-bg {
+    background-image: url('/static/img/Logo_mobile_white.png');
+    background-repeat: no-repeat;
+}
+
+/* .norm-bg {
+    background-image: url('/static/img/bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+} */
+
 input.delete {
     background-image: linear-gradient(to right, rgb(131, 0, 0), rgb(187, 0, 0));
     color: rgb(255, 255, 255);
