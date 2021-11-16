@@ -1,4 +1,4 @@
-# Store
+# CONVENIENCE STORE MANAGEMENT
 
 A typical convenience store, supermarket or minimart application, bundled with inventory tracking and management functionality.
 The application is desktop focused and not intended for use on devices smaller than 970px
