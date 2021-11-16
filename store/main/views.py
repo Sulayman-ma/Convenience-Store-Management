@@ -1,14 +1,14 @@
 from flask import render_template, url_for, redirect, request, flash, current_app
 from . import main
 from .. import db
-from .forms import CreateItem, RestockItems, ModifyItem
+from .forms import CreateItem, RestockItems
 from ..models import Item, CartRow
 
 
 
 @main.route('/favicon.ico')
 def favicon():
-    """Adding a favicon to the app. This method is stress. Flask should be ashamed."""
+    """Adding a favicon to the app"""
     return current_app.send_static_file('img/favicon.ico')
 
 
@@ -176,7 +176,6 @@ def restock():
 def manage_items():
     items = Item.query.all()
     low_stock_items = filter_low_stock(items)
-    modded_item = None
 
     if request.method == 'POST':
         # item(s) selected for deletion
